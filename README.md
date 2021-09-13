@@ -1,2 +1,2 @@
 # OOP_labs
-repo for hosting code for course OOP in university
+repo for hosting code for the course OOP in the university
