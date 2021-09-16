@@ -3,4 +3,4 @@ project(pack_1)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(pack_1 main.cpp tritset.cpp tritset.h)
+add_executable(pack_1 main.cpp TritSet.cpp TritSet.h)
