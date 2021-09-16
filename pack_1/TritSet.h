@@ -7,7 +7,7 @@
 using namespace std;
 typedef unsigned int uint;
 
-enum Trit{False, Unknown, True};
+enum Trit{False=-1, Unknown=0, True=1};
 
 class TritSet
 {
@@ -22,10 +22,15 @@ public:
     void trim(size_t lastIndex);
     void shrink();
 
+    Trit& operator[] (int index);
+    TritSet& operator= (const Trit &value);
+    TritSet& operator= (const TritSet &set);
+
 private:
     uint *trit_array;
     size_t _length;
     size_t _capacity;
+    size_t _previous_capacity;
 };
 
 #endif //PACK_1_TRITSET_H
