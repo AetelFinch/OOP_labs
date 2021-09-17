@@ -2,20 +2,24 @@
 #include <algorithm>
 #include "TritSet.h"
 
+#define TRITS_IN_BYTE 4
+
 using namespace std;
 
 
-TritSet::TritSet(int reserve_size)
+TritSet::TritSet(int trits_reserved)
 {
-    if (reserve_size < 0)
+    if (trits_reserved < 0)
         throw invalid_argument("incorrect reserve_size");
 
-    trit_array = new uint (reserve_size);
-    fill (0, reserve_size, Unknown);
+    size_t num_cells = trits_reserved / TRITS_IN_BYTE * sizeof(uint);
 
+    trit_array = new uint[num_cells];
+    fill (trit_array, trit_array + num_cells * sizeof(uint), Unknown);
+
+    _capacity = num_cells * sizeof(uint) * TRITS_IN_BYTE;
+    _previous_capacity = _capacity;
     _length = 0;
-    _capacity = reserve_size;
-    _previous_capacity = reserve_size;
 }
 
 TritSet::~TritSet()
@@ -53,7 +57,7 @@ void TritSet::shrink()
 
 }
 
-Trit &TritSet::operator[](int index)
+Trit &TritSet::operator[](size_t pos)
 {
 
 }

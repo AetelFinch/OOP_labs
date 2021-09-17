@@ -4,8 +4,9 @@
 #include <cstddef>
 #include <unordered_map>
 
+#define uint unsigned int
+
 using namespace std;
-typedef unsigned int uint;
 
 enum Trit{False=-1, Unknown=0, True=1};
 
@@ -22,7 +23,7 @@ public:
     void trim(size_t lastIndex);
     void shrink();
 
-    Trit& operator[] (int index);
+    Trit& operator[] (size_t index);
     TritSet& operator= (const Trit &value);
     TritSet& operator= (const TritSet &set);
 
