@@ -4,16 +4,15 @@
 #include <cstddef>
 #include <unordered_map>
 
-#define uint unsigned int
-
 using namespace std;
+using uint = unsigned int;
 
-enum Trit{False=-1, Unknown=0, True=1};
+enum Trit{Unknown, False, True};
 
 class TritSet
 {
 public:
-    explicit TritSet(int reserve_size=0);
+    explicit TritSet(int trits_reserved=0);
     ~TritSet();
 
     size_t length();
@@ -23,15 +22,22 @@ public:
     void trim(size_t lastIndex);
     void shrink();
 
-    Trit& operator[] (size_t index);
-    TritSet& operator= (const Trit &value);
+    TritSet& operator[] (ptrdiff_t pos);
+    TritSet& operator= (Trit value);
     TritSet& operator= (const TritSet &set);
 
 private:
     uint *trit_array;
     size_t _length;
     size_t _capacity;
-    size_t _previous_capacity;
+    size_t _words;
+    ptrdiff_t _required_trit_pos;
+    const uint _mask = 0b11;
+    const ptrdiff_t _trits_per_word = 4 * sizeof(uint);
+
+    void _set_trit(ptrdiff_t pos, Trit trit);
+    size_t _get_num_words(int trits_reserved);
+    size_t _get_actual_length();
 };
 
 #endif //PACK_1_TRITSET_H
