@@ -17,7 +17,6 @@ TritSet::TritSet(int trits_reserved)
     trit_array = (uint*)calloc(num_words, sizeof(uint));
 
     _capacity = num_words * _trits_per_word;
-    _required_trit_pos = -1;
     _length = 0;
     _words = num_words;
 }
@@ -58,60 +57,91 @@ void TritSet::shrink()
 
 }
 
-TritSet &TritSet::operator[](ptrdiff_t pos)
+TritSet::ProxyTritSet TritSet::operator[](size_t pos)
 {
-    _required_trit_pos = pos;
-    return *this;
+    return ProxyTritSet{*this, pos};
 }
 
-TritSet &TritSet::operator= (Trit value)
+Trit TritSet::operator[](size_t pos) const
 {
-    if (_required_trit_pos <= _capacity)
-    {
-        _set_trit(_required_trit_pos, value);
-    }
-    else if (_required_trit_pos > _capacity && value != Unknown)
-    {
-        size_t num_words = _get_num_words(_required_trit_pos);
-        trit_array = (uint*)realloc(trit_array, num_words * sizeof(uint));
-        memset(trit_array + _words, Unknown, (num_words - _words) * sizeof(uint));
-
-        _set_trit(_required_trit_pos, value);
-
-        _capacity = num_words * _trits_per_word;
-        _length = _get_actual_length();
-        _required_trit_pos = -1;
-        _words = num_words;
-    }
-    return *this;
+    return _get_trit(pos);
 }
 
-TritSet &TritSet::operator= (const TritSet &set)
+TritSet& TritSet::ProxyTritSet::operator=(const Trit _trit)
 {
-    if (&set != this)
+    if (_pos <= _tritSet._capacity)
     {
-        _length = set._length;
-        _capacity = set._capacity;
-        _words = set._words;
-        _required_trit_pos = set._required_trit_pos;
+        _tritSet._set_trit(_pos, _trit);
+    }
+    else if (_pos > _tritSet._capacity && _trit != Unknown)
+    {
+        size_t num_words = _tritSet._get_num_words(_pos);
+        _tritSet.trit_array = (uint*)realloc(_tritSet.trit_array, num_words * sizeof(uint));
+        memset(_tritSet.trit_array + _tritSet._words * sizeof(uint), Unknown, (num_words - _tritSet._words) * sizeof(uint));
+
+        _tritSet._set_trit(_pos, _trit);
+
+        _tritSet._words = num_words;
+        _tritSet._capacity = num_words * _tritSet._trits_per_word;
+        _tritSet._length = _tritSet._get_actual_length();
+    }
+
+    return this->_tritSet;
+}
+
+TritSet &TritSet::operator=(const TritSet &tritSet)
+{
+    if (&tritSet != this)
+    {
+        _length = tritSet._length;
+        _capacity = tritSet._capacity;
+        _words = tritSet._words;
 
         free(trit_array);
         trit_array = (uint*)calloc(_words, sizeof(uint));
-        memcpy(trit_array, set.trit_array, _words * sizeof(uint));
+        memcpy(trit_array, tritSet.trit_array, _words * sizeof(uint));
     }
+
     return *this;
 }
 
-void TritSet::_set_trit(ptrdiff_t pos, Trit trit)
+//TritSet::ProxyTritSet &TritSet::ProxyTritSet::operator=(const TritSet::ProxyTritSet &set)
+//{
+//    if (this != &set)
+//    {
+//        _tritSet._length = set._tritSet._length;
+//        _tritSet._capacity = set._tritSet._capacity;
+//        _tritSet._words = set._tritSet._words;
+//
+//        free(_tritSet.trit_array);
+//        _tritSet.trit_array = (uint*)calloc(_tritSet._words, sizeof(uint));
+//        memcpy(_tritSet.trit_array, set._tritSet.trit_array, _tritSet._words * sizeof(uint));
+//    }
+//
+//    return *this;
+//}
+
+
+TritSet& TritSet::_set_trit(size_t pos, Trit trit)
 {
     size_t num_trit = (pos % _trits_per_word) * 2;
     size_t num_cell = pos / _trits_per_word;
 
     trit_array[num_cell] &= (~(_mask << num_trit));
     trit_array[num_cell] |= (trit << num_trit);
+
+    return *this;
 }
 
-size_t TritSet::_get_num_words(int trits_reserved)
+Trit TritSet::_get_trit(size_t pos) const
+{
+    if (_length < pos)
+        return Unknown;
+
+    return Trit((trit_array[pos / _trits_per_word] >> 2 * (pos % _trits_per_word)) & _mask);
+}
+
+size_t TritSet::_get_num_words(size_t trits_reserved)
 {
     size_t num_words = trits_reserved / _trits_per_word;
     if (num_words * _trits_per_word < trits_reserved)
@@ -137,6 +167,5 @@ size_t TritSet::_get_actual_length()
     }
     return 0;
 }
-
 
 
