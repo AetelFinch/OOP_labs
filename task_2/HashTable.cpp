@@ -6,11 +6,15 @@ HashTable::HashTable()
 {
     _table_size = 32;
     _occupied_cells = 0;
-    _table = new vector<pair<Key, Value>>(_table_size);
+    _table = new std::vector<std::list<std::pair<Key, Value>>>(_table_size);
 }
 
 HashTable::~HashTable()
 {
+    for (unsigned int i = 0; i < _table_size; ++i)
+    {
+        _table->at(i).clear();
+    }
     delete _table;
 }
 
@@ -19,8 +23,17 @@ HashTable::HashTable(HashTable &b)
     _table_size = b._table_size;
     _occupied_cells = b._occupied_cells;
 
+    for (unsigned int i = 0; i < _table_size; ++i)
+    {
+        _table->at(i).clear();
+    }
     delete _table;
-    _table = b._table;
+
+    _table = new std::vector<std::list<std::pair<Key, Value>>>(_table_size);
+    for (unsigned int i = 0; i < _table_size; ++i)
+    {
+        _table->at(i) = b._table->at(i);
+    }
 }
 
 HashTable::HashTable(const HashTable &b)
@@ -28,8 +41,17 @@ HashTable::HashTable(const HashTable &b)
     _table_size = b._table_size;
     _occupied_cells = b._occupied_cells;
 
+    for (unsigned int i = 0; i < _table_size; ++i)
+    {
+        _table->at(i).clear();
+    }
     delete _table;
-    _table = b._table;
+
+    _table = new std::vector<std::list<std::pair<Key, Value>>>(_table_size);
+    for (unsigned int i = 0; i < _table_size; ++i)
+    {
+        _table->at(i) = b._table->at(i);
+    }
 }
 
 HashTable &HashTable::operator=(const HashTable &b)
@@ -40,8 +62,18 @@ HashTable &HashTable::operator=(const HashTable &b)
     _table_size = b._table_size;
     _occupied_cells = b._occupied_cells;
 
+    for (unsigned int i = 0; i < _table_size; ++i)
+    {
+        _table->at(i).clear();
+    }
     delete _table;
-    _table = b._table;
+
+    _table = new std::vector<std::list<std::pair<Key, Value>>>(_table_size);
+    for (unsigned int i = 0; i < _table_size; ++i)
+    {
+        _table->at(i) = b._table->at(i);
+    }
+
     return *this;
 }
 
@@ -67,17 +99,20 @@ void HashTable::swap(HashTable &b)
     std::swap(_table_size, b._table_size);
     std::swap(_occupied_cells, b._occupied_cells);
 
-    vector<pair<Key, Value>> *tmp = _table;
+    std::vector<std::list<std::pair<Key, Value>>> *tmp = _table;
     _table = b._table;
     b._table = tmp;
 }
 
 void HashTable::clear()
 {
-    _table_size = 32;
+    _table_size = 0;
     _occupied_cells = 0;
 
+    for (unsigned int i = 0; i < _table_size; ++i)
+    {
+        _table->at(i).clear();
+    }
     delete _table;
-    _table = new vector<pair<Key, Value>>(_table_size);
 }
 

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <list>
 
 struct Student
 {
@@ -46,7 +47,8 @@ public:
     friend bool operator!=(const HashTable& a, const HashTable& b);
 
 private:
-    std::vector<std::pair<Key, Value>> *_table;
+
+    std::vector<std::list<std::pair<Key, Value>>> *_table; //vector of lists of pairs of Keys and Values
     size_t _table_size;
     size_t _occupied_cells;
 };
