@@ -4,15 +4,13 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 struct Student
 {
     size_t age;
     size_t weight;
 };
 
-typedef string Key;
+typedef std::string Key;
 typedef Student Value;
 
 
@@ -21,11 +19,11 @@ class HashTable
 public:
     HashTable();
     ~HashTable();
-    HashTable(const HashTable& b);
     HashTable(HashTable& b);
+    HashTable(const HashTable& b);
 
     HashTable& operator=(const HashTable& b);
-    HashTable& operator=(HashTable&& b);
+    HashTable& operator=(HashTable&& b) noexcept;
 
     void swap(HashTable& b);
 
@@ -48,7 +46,7 @@ public:
     friend bool operator!=(const HashTable& a, const HashTable& b);
 
 private:
-    vector <Value> _table;
+    std::vector<std::pair<Key, Value>> *_table;
     size_t _table_size;
     size_t _occupied_cells;
 };
