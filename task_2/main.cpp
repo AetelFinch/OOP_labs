@@ -1,9 +1,6 @@
-#include <iostream>
 #include <gtest.h>
-#include <random>
 #include "HashTable.h"
 
-//Place fo tests
 using namespace std;
 
 class TestHashTable : public::testing::Test
@@ -39,7 +36,87 @@ TEST_F(TestHashTable, TestContains)
     ASSERT_FALSE(table.contains("Roy"));
     ASSERT_FALSE(table.contains("qwerty"));
 }
-//    cout << table.contains("Max") << endl;
-//    cout << table.contains("George") << endl;
-//    table.erase("Max");
-//    cout << table.contains("Max") << endl;
+
+TEST_F(TestHashTable, TestSize)
+{
+    ASSERT_EQ(table.size(), 29);
+
+    table.erase("Max");
+
+    ASSERT_EQ(table.size(), 28);
+
+    table.clear();
+
+    ASSERT_EQ(table.size(), 0);
+}
+
+TEST_F(TestHashTable, TestEmptyAndClear)
+{
+    ASSERT_FALSE(table.empty());
+    table.clear();
+    ASSERT_TRUE(table.empty());
+}
+
+TEST_F(TestHashTable, TestErase)
+{
+    ASSERT_FALSE(table.empty());
+    ASSERT_EQ(table.size(), 29);
+
+    ASSERT_FALSE(table.erase("qwerty"));
+    ASSERT_EQ(table.size(), 29);
+
+    ASSERT_TRUE(table.erase("Max"));
+    ASSERT_TRUE(table.erase("Vanya"));
+    ASSERT_TRUE(table.erase("Misha"));
+
+    ASSERT_EQ(table.size(), 26);
+
+    string chars = "qwertyuiopasdfghjklzxcvbnm";
+    for (auto i : chars)
+    {
+        string x(1, i);
+        ASSERT_TRUE(table.erase(x));
+    }
+    ASSERT_EQ(table.size(), 0);
+    ASSERT_TRUE(table.empty());
+
+    ASSERT_FALSE(table.erase("qwerty"));
+    ASSERT_EQ(table.size(), 0);
+    ASSERT_TRUE(table.empty());
+}
+
+TEST_F(TestHashTable, TestInsert)
+{
+    ASSERT_EQ(table.size(), 29);
+
+    ASSERT_TRUE(table.insert("qwerty", {50, 50}));
+    ASSERT_EQ(table.size(), 30);
+
+    ASSERT_FALSE(table.insert("Max", {18, 60}));
+    ASSERT_EQ(table.size(), 30);
+}
+
+TEST_F(TestHashTable, TestSwap)
+{
+    HashTable new_table;
+    new_table.insert("qwerty", {13, 13});
+
+    ASSERT_EQ(new_table.size(), 1);
+
+    new_table.swap(table);
+
+    ASSERT_EQ(new_table.size(), 29);
+    ASSERT_TRUE(new_table.contains("Max"));
+    ASSERT_TRUE(new_table.contains("Misha"));
+    ASSERT_TRUE(new_table.contains("Vanya"));
+    ASSERT_TRUE(new_table.contains("a"));
+    ASSERT_FALSE(new_table.contains("Timur"));
+    ASSERT_FALSE(new_table.contains("Roy"));
+    ASSERT_FALSE(new_table.contains("qwerty"));
+
+    ASSERT_EQ(table.size(), 1);
+    ASSERT_TRUE(table.contains("qwerty"));
+    ASSERT_FALSE(table.contains("Max"));
+    ASSERT_FALSE(table.contains("Misha"));
+    ASSERT_FALSE(table.contains("Vanya"));
+}
