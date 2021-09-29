@@ -107,14 +107,14 @@ void HashTable::swap(HashTable &b)
 
 void HashTable::clear()
 {
-    _table_size = 0;
-    _number_elements = 0;
-
     for (unsigned int i = 0; i < _table_size; ++i)
     {
         _table->at(i).clear();
     }
-    delete _table;
+    _table_size = 0;
+    _number_elements = 0;
+
+    _table->clear();
 }
 
 bool HashTable::erase(const Key &k)
@@ -126,6 +126,7 @@ bool HashTable::erase(const Key &k)
         if (it->first == k)
         {
             _table->at(idx).erase(it);
+            --_number_elements;
             return true;
         }
     }
@@ -169,6 +170,5 @@ size_t HashTable::_hash(const Key& key) const
 
 bool HashTable::empty() const
 {
-    return _number_elements > 0;
+    return (_number_elements == 0);
 }
-
