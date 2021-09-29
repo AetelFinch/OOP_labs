@@ -34,7 +34,7 @@ public:
 
     bool insert(const Key& k, const Value& v);
 
-    bool contains(const Key& k) const;
+    bool contains(const Key& k) ;
 
     size_t size() const;
     bool empty() const;
@@ -47,10 +47,11 @@ public:
     friend bool operator!=(const HashTable& a, const HashTable& b);
 
 private:
-
     std::vector<std::list<std::pair<Key, Value>>> *_table; //vector of lists of pairs of Keys and Values
     size_t _table_size;
-    size_t _occupied_cells;
+    size_t _number_elements;
+
+    size_t _hash(const Key& key) const;
 };
 
 bool operator==(const HashTable& a, const HashTable& b);

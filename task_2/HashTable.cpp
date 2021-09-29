@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "HashTable.h"
 
 using namespace std;
@@ -5,7 +6,7 @@ using namespace std;
 HashTable::HashTable()
 {
     _table_size = 32;
-    _occupied_cells = 0;
+    _number_elements = 0;
     _table = new std::vector<std::list<std::pair<Key, Value>>>(_table_size);
 }
 
@@ -21,7 +22,7 @@ HashTable::~HashTable()
 HashTable::HashTable(HashTable &b)
 {
     _table_size = b._table_size;
-    _occupied_cells = b._occupied_cells;
+    _number_elements = b._number_elements;
 
     for (unsigned int i = 0; i < _table_size; ++i)
     {
@@ -39,7 +40,7 @@ HashTable::HashTable(HashTable &b)
 HashTable::HashTable(const HashTable &b)
 {
     _table_size = b._table_size;
-    _occupied_cells = b._occupied_cells;
+    _number_elements = b._number_elements;
 
     for (unsigned int i = 0; i < _table_size; ++i)
     {
@@ -60,7 +61,7 @@ HashTable &HashTable::operator=(const HashTable &b)
         return *this;
 
     _table_size = b._table_size;
-    _occupied_cells = b._occupied_cells;
+    _number_elements = b._number_elements;
 
     for (unsigned int i = 0; i < _table_size; ++i)
     {
@@ -83,7 +84,7 @@ HashTable &HashTable::operator=(HashTable &&b) noexcept
         return *this;
 
     _table_size = b._table_size;
-    _occupied_cells = b._occupied_cells;
+    _number_elements = b._number_elements;
 
     _table = b._table;
     b._table = nullptr;
@@ -97,7 +98,7 @@ void HashTable::swap(HashTable &b)
         return;
 
     std::swap(_table_size, b._table_size);
-    std::swap(_occupied_cells, b._occupied_cells);
+    std::swap(_number_elements, b._number_elements);
 
     std::vector<std::list<std::pair<Key, Value>>> *tmp = _table;
     _table = b._table;
@@ -107,12 +108,67 @@ void HashTable::swap(HashTable &b)
 void HashTable::clear()
 {
     _table_size = 0;
-    _occupied_cells = 0;
+    _number_elements = 0;
 
     for (unsigned int i = 0; i < _table_size; ++i)
     {
         _table->at(i).clear();
     }
     delete _table;
+}
+
+bool HashTable::erase(const Key &k)
+{
+    size_t idx = _hash(k);
+
+    for (auto it = _table->at(idx).begin(); it != _table->at(idx).end(); ++it)
+    {
+        if (it->first == k)
+        {
+            _table->at(idx).erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool HashTable::insert(const Key &k, const Value &v)
+{
+    if (contains(k))
+        return false;
+
+    size_t idx = _hash(k);
+    _table->at(idx).push_back({k, v});
+
+    ++_number_elements;
+
+    return true;
+}
+
+bool HashTable::contains(const Key &k)
+{
+    size_t idx = _hash(k);
+
+    for (auto & it : _table->at(idx))
+    {
+        if (it.first == k)
+            return true;
+    }
+    return false;
+}
+
+size_t HashTable::size() const
+{
+    return _number_elements;
+}
+
+size_t HashTable::_hash(const Key& key) const
+{
+    return (hash<string>{}(key) % _table_size);
+}
+
+bool HashTable::empty() const
+{
+    return _number_elements > 0;
 }
 
