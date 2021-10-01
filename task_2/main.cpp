@@ -32,7 +32,6 @@ bool operator==(const Value& a, const Value& b)
     return false;
 }
 
-
 TEST_F(TestHashTable, TestContains)
 {
     ASSERT_TRUE(table.contains("Max"));
@@ -155,4 +154,17 @@ TEST_F(TestHashTable, TestAt)
     ASSERT_EQ(table.at("q"), test_value);
 
     ASSERT_THROW(table.at("qwerty"), std::out_of_range);
+}
+
+TEST_F(TestHashTable, TestCompareOperators)
+{
+    HashTable new_table;
+    new_table = table;
+    ASSERT_TRUE(table == new_table);
+
+    new_table.erase("Max");
+    ASSERT_FALSE(table == new_table);
+
+    new_table.insert("Max", {18, 50});
+    ASSERT_TRUE(table == new_table);
 }
