@@ -22,16 +22,16 @@ HashTable::~HashTable()
 
 HashTable::HashTable(HashTable &b)
 {
-    _table_size = b._table_size;
-    _number_elements = b._number_elements;
-
     for (unsigned int i = 0; i < _table_size; ++i)
     {
         _table->at(i).clear();
     }
     delete _table;
 
+    _table_size = b._table_size;
+    _number_elements = b._number_elements;
     _table = new std::vector<std::list<std::pair<Key, Value>>>(_table_size);
+
     for (unsigned int i = 0; i < _table_size; ++i)
     {
         _table->at(i) = b._table->at(i);
@@ -40,16 +40,16 @@ HashTable::HashTable(HashTable &b)
 
 HashTable::HashTable(const HashTable &b)
 {
-    _table_size = b._table_size;
-    _number_elements = b._number_elements;
-
     for (unsigned int i = 0; i < _table_size; ++i)
     {
         _table->at(i).clear();
     }
     delete _table;
 
+    _table_size = b._table_size;
+    _number_elements = b._number_elements;
     _table = new std::vector<std::list<std::pair<Key, Value>>>(_table_size);
+
     for (unsigned int i = 0; i < _table_size; ++i)
     {
         _table->at(i) = b._table->at(i);
@@ -201,6 +201,34 @@ const Value & HashTable::at(const Key &k) const
 
     return _get_value(k);
 }
+
+bool operator==(const HashTable& a, const HashTable& b)
+{
+    if (a._table_size != b._table_size || a._number_elements != b._number_elements)
+        return false;
+
+    for (size_t idx = 0; idx < a._table_size; ++idx)
+    {
+        if (a._table->at(idx).size() != b._table->at(idx).size())
+            return false;
+
+        auto a_it = a._table->at(idx).begin();
+        auto b_it = b._table->at(idx).begin();
+
+        for (; a_it != a._table->at(idx).end(); ++a_it, ++b_it)
+        {
+            if (a_it->first != b_it->first || a_it->second.age != b_it->second.age || a_it->second.weight != b_it->second.weight)
+                return false;
+        }
+    }
+    return true;
+}
+
+bool operator!=(const HashTable& a, const HashTable& b)
+{
+    return !(a == b);
+}
+
 
 size_t HashTable::_hash(const Key& key, size_t size) const
 {

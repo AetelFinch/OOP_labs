@@ -60,5 +60,4 @@ private:
 bool operator==(const HashTable& a, const HashTable& b);
 bool operator!=(const HashTable& a, const HashTable& b);
 
-
 #endif //TASK_2_HASHTABLE_H
