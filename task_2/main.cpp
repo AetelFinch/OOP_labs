@@ -25,6 +25,13 @@ protected:
     void TearDown() {}
 };
 
+bool operator==(const Value& a, const Value& b)
+{
+    if (a.age == b.age && a.weight == b.weight)
+        return true;
+    return false;
+}
+
 
 TEST_F(TestHashTable, TestContains)
 {
@@ -119,4 +126,33 @@ TEST_F(TestHashTable, TestSwap)
     ASSERT_FALSE(table.contains("Max"));
     ASSERT_FALSE(table.contains("Misha"));
     ASSERT_FALSE(table.contains("Vanya"));
+}
+
+TEST_F(TestHashTable, TestSquareBrackets)
+{
+    Value test_value = {18, 50};
+    ASSERT_EQ(table["Max"], test_value);
+
+    test_value = {18, 80};
+    ASSERT_EQ(table["Misha"], test_value);
+
+    test_value = {1, 1};
+    ASSERT_EQ(table["q"], test_value);
+
+    test_value = {0, 0};
+    ASSERT_EQ(table["qwerty"], test_value);
+}
+
+TEST_F(TestHashTable, TestAt)
+{
+    Value test_value = {18, 50};
+    ASSERT_EQ(table.at("Max"), test_value);
+
+    test_value = {18, 80};
+    ASSERT_EQ(table.at("Misha"), test_value);
+
+    test_value = {1, 1};
+    ASSERT_EQ(table.at("q"), test_value);
+
+    ASSERT_THROW(table.at("qwerty"), std::out_of_range);
 }
