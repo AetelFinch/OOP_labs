@@ -34,7 +34,7 @@ public:
 
     bool insert(const Key& k, const Value& v);
 
-    bool contains(const Key& k) ;
+    bool contains(const Key& k) const;
 
     size_t size() const;
     bool empty() const;
@@ -54,6 +54,7 @@ private:
 
     size_t _hash(const Key& key, size_t size) const;
     void _rehash();
+    Value& _get_value(const Key& k) const;
 };
 
 bool operator==(const HashTable& a, const HashTable& b);

@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <stdexcept>
 #include "HashTable.h"
 
 using namespace std;
@@ -149,7 +150,7 @@ bool HashTable::insert(const Key &k, const Value &v)
     return true;
 }
 
-bool HashTable::contains(const Key &k)
+bool HashTable::contains(const Key &k) const
 {
     size_t idx = _hash(k, _table_size);
 
@@ -169,6 +170,36 @@ size_t HashTable::size() const
 bool HashTable::empty() const
 {
     return (_number_elements == 0);
+}
+
+Value &HashTable::operator[](const Key &k)
+{
+    if (!contains(k))
+    {
+        insert(k, {0 , 0});
+    }
+
+    return _get_value(k);
+}
+
+Value &HashTable::at(const Key &k)
+{
+    if (!contains(k))
+    {
+        throw std::out_of_range("this key is not in hash table");
+    }
+
+    return _get_value(k);
+}
+
+const Value & HashTable::at(const Key &k) const
+{
+    if (!contains(k))
+    {
+        throw std::out_of_range("this key is not in hash table");
+    }
+
+    return _get_value(k);
 }
 
 size_t HashTable::_hash(const Key& key, size_t size) const
@@ -194,4 +225,14 @@ void HashTable::_rehash()
     _table = new_table;
 
     _table_size = new_size;
+}
+
+Value &HashTable::_get_value(const Key &k) const
+{
+    size_t idx = _hash(k, _table_size);
+    for (auto & it : _table->at(idx))
+    {
+        if (it.first == k)
+            return it.second;
+    }
 }
