@@ -50,8 +50,10 @@ private:
     std::vector<std::list<std::pair<Key, Value>>> *_table; //vector of lists of pairs of Keys and Values
     size_t _table_size;
     size_t _number_elements;
+    const double _load_factor = 0.75;
 
-    size_t _hash(const Key& key) const;
+    size_t _hash(const Key& key, size_t size) const;
+    void _rehash();
 };
 
 bool operator==(const HashTable& a, const HashTable& b);

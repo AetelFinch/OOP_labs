@@ -60,14 +60,14 @@ HashTable &HashTable::operator=(const HashTable &b)
     if (this == &b)
         return *this;
 
-    _table_size = b._table_size;
-    _number_elements = b._number_elements;
-
     for (unsigned int i = 0; i < _table_size; ++i)
     {
         _table->at(i).clear();
     }
     delete _table;
+
+    _table_size = b._table_size;
+    _number_elements = b._number_elements;
 
     _table = new std::vector<std::list<std::pair<Key, Value>>>(_table_size);
     for (unsigned int i = 0; i < _table_size; ++i)
@@ -119,7 +119,7 @@ void HashTable::clear()
 
 bool HashTable::erase(const Key &k)
 {
-    size_t idx = _hash(k);
+    size_t idx = _hash(k, _table_size);
 
     for (auto it = _table->at(idx).begin(); it != _table->at(idx).end(); ++it)
     {
@@ -138,7 +138,10 @@ bool HashTable::insert(const Key &k, const Value &v)
     if (contains(k))
         return false;
 
-    size_t idx = _hash(k);
+    if ((size_t)(_table_size * _load_factor) <= _number_elements)
+        _rehash();
+
+    size_t idx = _hash(k, _table_size);
     _table->at(idx).push_back({k, v});
 
     ++_number_elements;
@@ -148,7 +151,7 @@ bool HashTable::insert(const Key &k, const Value &v)
 
 bool HashTable::contains(const Key &k)
 {
-    size_t idx = _hash(k);
+    size_t idx = _hash(k, _table_size);
 
     for (auto & it : _table->at(idx))
     {
@@ -163,12 +166,32 @@ size_t HashTable::size() const
     return _number_elements;
 }
 
-size_t HashTable::_hash(const Key& key) const
-{
-    return (hash<string>{}(key) % _table_size);
-}
-
 bool HashTable::empty() const
 {
     return (_number_elements == 0);
+}
+
+size_t HashTable::_hash(const Key& key, size_t size) const
+{
+    return (hash<string>{}(key) % size);
+}
+
+void HashTable::_rehash()
+{
+    size_t new_size = _table_size * 2;
+    std::vector<std::list<std::pair<Key, Value>>> *new_table;
+    new_table = new std::vector<std::list<std::pair<Key, Value>>>(new_size);
+
+    for (size_t cell_idx = 0; cell_idx != _table_size; ++cell_idx)
+    {
+        for (auto &it : _table->at(cell_idx))
+        {
+            size_t idx = _hash(it.first, new_size);
+            new_table->at(idx).push_back({it.first, it.second});
+        }
+    }
+    _table->clear();
+    _table = new_table;
+
+    _table_size = new_size;
 }
