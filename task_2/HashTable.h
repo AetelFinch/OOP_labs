@@ -9,6 +9,18 @@ struct Student
 {
     size_t age;
     size_t weight;
+
+    friend bool operator==(const Student& a, const Student& b)
+    {
+        if (a.age == b.age && a.weight == b.weight)
+            return true;
+        return false;
+    }
+
+    friend bool operator!=(const Student& a, const Student& b)
+    {
+        return !(a == b);
+    }
 };
 
 typedef std::string Key;

@@ -25,13 +25,6 @@ protected:
     void TearDown() {}
 };
 
-bool operator==(const Value& a, const Value& b)
-{
-    if (a.age == b.age && a.weight == b.weight)
-        return true;
-    return false;
-}
-
 TEST_F(TestHashTable, TestContains)
 {
     ASSERT_TRUE(table.contains("Max"));

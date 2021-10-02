@@ -217,7 +217,7 @@ bool operator==(const HashTable& a, const HashTable& b)
 
         for (; a_it != a._table->at(idx).end(); ++a_it, ++b_it)
         {
-            if (a_it->first != b_it->first || a_it->second.age != b_it->second.age || a_it->second.weight != b_it->second.weight)
+            if (a_it->first != b_it->first || a_it->second != b_it->second)
                 return false;
         }
     }
