@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iterator>
 #include <stdexcept>
 #include "HashTable.h"
 
@@ -22,12 +23,6 @@ HashTable::~HashTable()
 
 HashTable::HashTable(HashTable &b)
 {
-    for (unsigned int i = 0; i < _table_size; ++i)
-    {
-        _table->at(i).clear();
-    }
-    delete _table;
-
     _table_size = b._table_size;
     _number_elements = b._number_elements;
     _table = new std::vector<std::list<std::pair<Key, Value>>>(_table_size);
@@ -40,12 +35,6 @@ HashTable::HashTable(HashTable &b)
 
 HashTable::HashTable(const HashTable &b)
 {
-    for (unsigned int i = 0; i < _table_size; ++i)
-    {
-        _table->at(i).clear();
-    }
-    delete _table;
-
     _table_size = b._table_size;
     _number_elements = b._number_elements;
     _table = new std::vector<std::list<std::pair<Key, Value>>>(_table_size);
@@ -86,9 +75,11 @@ HashTable &HashTable::operator=(HashTable &&b) noexcept
 
     _table_size = b._table_size;
     _number_elements = b._number_elements;
-
     _table = b._table;
+
     b._table = nullptr;
+    b._table_size = 0;
+    b._number_elements = 0;
 
     return *this;
 }

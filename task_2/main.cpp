@@ -151,8 +151,7 @@ TEST_F(TestHashTable, TestAt)
 
 TEST_F(TestHashTable, TestCompareOperators)
 {
-    HashTable new_table;
-    new_table = table;
+    HashTable new_table(table);
     ASSERT_TRUE(table == new_table);
 
     new_table.erase("Max");
