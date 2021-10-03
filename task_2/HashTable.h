@@ -38,20 +38,25 @@ public:
     HashTable& operator=(const HashTable& b);
     HashTable& operator=(HashTable&& b) noexcept;
 
-    void swap(HashTable& b);
+    void swap(HashTable& b);  // Exchanges the values of two hash tables
 
-    void clear();
+    void clear();  // Cleans the container
 
-    bool erase(const Key& k);
+    bool erase(const Key& k);  // Deletes an element by the specified key
 
-    bool insert(const Key& k, const Value& v);
+    bool insert(const Key& k, const Value& v);  // Inserting into the container. The return value is the success of the insertion
 
-    bool contains(const Key& k) const;
+    bool contains(const Key& k) const;  // Checking for the presence of a value for a given key
 
-    size_t size() const;
-    bool empty() const;
+    size_t size() const;  // Returns number of elements in a hash table
+    bool empty() const;  // Returns true if a hash table is empty, otherwise returns false
 
+    // Returns the value by key. If there is no key in the container,
+    // inserts the value created by the default constructor into the container
+    // and returns a reference to it
     Value& operator[](const Key& k);
+
+    // Returns the value by key. Throws an exception on failure.
     Value& at(const Key& k);
     const Value& at(const Key& k) const;
 
