@@ -45,6 +45,17 @@ HashTable::HashTable(const HashTable &b)
     }
 }
 
+HashTable::HashTable(HashTable &&b) noexcept
+{
+    _table_size = b._table_size;
+    _number_elements = b._number_elements;
+    _table = b._table;
+
+    b._table = nullptr;
+    b._table_size = 0;
+    b._number_elements = 0;
+}
+
 HashTable &HashTable::operator=(const HashTable &b)
 {
     if (this == &b)

@@ -34,6 +34,7 @@ public:
     ~HashTable();
     HashTable(HashTable& b);
     HashTable(const HashTable& b);
+    HashTable(HashTable&& b) noexcept;
 
     HashTable& operator=(const HashTable& b);
     HashTable& operator=(HashTable&& b) noexcept;
