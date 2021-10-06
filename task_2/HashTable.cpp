@@ -223,7 +223,7 @@ bool operator!=(const HashTable& a, const HashTable& b)
 
 size_t HashTable::_hash(const Key& key, size_t size) const
 {
-    return (hash<string>{}(key) % size);
+    return (hash<Key>{}(key) % size);
 }
 
 void HashTable::_rehash()
@@ -239,6 +239,7 @@ void HashTable::_rehash()
             size_t idx = _hash(it.first, new_size);
             new_table->at(idx).push_back({it.first, it.second});
         }
+        _table->at(cell_idx).clear();
     }
     _table->clear();
     _table = new_table;

@@ -8,7 +8,7 @@ class TestHashTable : public::testing::Test
 protected:
     HashTable table;
 
-    void SetUp()
+    void SetUp() override
     {
         table.insert("Max", {18, 50});
         table.insert("Vanya", {18, 76});
@@ -22,7 +22,7 @@ protected:
         }
     }
 
-    void TearDown() {}
+    void TearDown() override {}
 };
 
 TEST_F(TestHashTable, TestContains)
