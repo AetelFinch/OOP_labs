@@ -4,17 +4,9 @@
 #include <sstream>
 #include <algorithm>
 
-Parser::Parser()
-{
-    _desk = new std::map<int, std::vector<std::string>>;
-    _commands = new std::vector<int>;
-    _cur_command = 0;
-    _is_file_exist = false;
-}
-
 Parser::~Parser()
 {
-    for (auto block : _desk)
+    for (auto block : *_desk)
     {
         block.second.clear();
     }
@@ -22,7 +14,7 @@ Parser::~Parser()
     delete _commands;
 }
 
-Parser::Parser(std::string filename)
+Parser::Parser(const std::string& filename)
 {
     _desk = new std::map<int, std::vector<std::string>>;
     _commands = new std::vector<int>;
@@ -31,33 +23,44 @@ Parser::Parser(std::string filename)
     if (!file.is_open())
     {
         //TODO throw exception FileNotExist
+        throw std::exception();
     }
 
-    if (file.getline() != "desk")
+    std::string check_format;
+    std::getline(file, check_format);
+
+    if (check_format != "desc")
     {
-        file.close()
+        file.close();
         //TODO throw exception IncorrectConfigurationFileError
+        throw std::exception();
     }
 
     std::string word;
+    std::string block;
 
-    std::vector<std::string> params;
-    while ((block = file.getline()) != "csed")
+    while (true)
     {
+        std::getline(file, block);
+        if (block == "csed")
+            break;
+
         std::istringstream iss(block, std::istringstream::in);
 
+        std::vector<std::string> params;
         while(iss >> word) params.push_back(word);
 
         if (!_is_params_correct(params))
         {
             file.close();
             //TODO throw exception SyntaxError
+            throw std::exception();
         }
 
         _push_params_to_desk(params);
     }
 
-    block = file.getline();
+    std::getline(file, block);
     std::istringstream iss(block, std::istringstream::in);
     std::vector<std::string> workflow;
 
@@ -66,18 +69,18 @@ Parser::Parser(std::string filename)
     {
         file.close();
         //TODO throw exception SyntaxError
+        throw std::exception();
     }
 
     _push_workflow_to_commands(workflow);
 
     _cur_command = 0;
-    _is_file_exist = false;
 }
 
 int Parser::get_current_command()
 {
     ++_cur_command;
-    return _commands[_cur_command - 1];
+    return _commands->at(_cur_command - 1);
 }
 
 bool Parser::_is_params_correct(std::vector<std::string> params)
@@ -98,7 +101,7 @@ bool Parser::_is_params_correct(std::vector<std::string> params)
         return false;
     }
 
-    if (_desk->count(id) == 0)
+    if (_desk->count(id) == 1) //duplicate id
         return false;
 
     return true;
@@ -107,12 +110,14 @@ bool Parser::_is_params_correct(std::vector<std::string> params)
 void Parser::_push_params_to_desk(std::vector<std::string> params)
 {
     int id = std::stoi(params[0]);
-    _desk[id].insert(_desk[id].begin(), params.begin() + 2, params.end());
+    std::vector<std::string> vec;
+    vec.insert(vec.begin(), params.begin() + 2, params.end());
+    _desk->insert(std::pair<int, std::vector<std::string>>(id, vec));
 }
 
 bool Parser::_is_workflow_correct(std::vector<std::string> workflow)
 {
-    if (workflow.size() < 1)
+    if (workflow.empty())
         return false;
 
     if (workflow.size() % 2 == 0)

@@ -5,23 +5,19 @@
 #include <string>
 #include <map>
 
-using File = std::list<std::string>>;
+using File = std::vector<std::string>;
 
 class Parser
 {
 public:
-    Parser();
     ~Parser();
-    Parser(std::string filename);
-
-//    Parser& operator=()
+    Parser(const std::string& filename);
 
     int get_current_command();
 
 private:
     std::map<int, std::vector<std::string>> *_desk;
     std::vector<int> *_commands;
-    bool _is_file_exist;
     size_t _cur_command;
 
     bool _is_params_correct(std::vector<std::string> params);

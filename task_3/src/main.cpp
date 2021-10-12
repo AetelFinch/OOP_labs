@@ -1,7 +1,12 @@
 #include <iostream>
+#include <fstream>
+
+#include "../include/Parser.h"
 
 int main()
 {
-    std::cout << "Hello, World!" << std::endl;
+    std::string filename = "../../test/configuration.txt";
+    Parser parser(filename);
+
     return 0;
 }
