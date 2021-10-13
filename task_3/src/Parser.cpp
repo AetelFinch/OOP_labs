@@ -16,9 +16,6 @@ Parser::~Parser()
 
 Parser::Parser(const std::string& filename)
 {
-    _desk = new std::map<int, std::vector<std::string>>;
-    _commands = new std::vector<int>;
-
     std::ifstream file(filename);
     if (!file.is_open())
     {
@@ -35,6 +32,9 @@ Parser::Parser(const std::string& filename)
         //TODO throw exception IncorrectConfigurationFileError
         throw std::exception();
     }
+
+    _desk = new std::map<int, std::vector<std::string>>;
+    _commands = new std::vector<int>;
 
     std::string word;
     std::string block;
