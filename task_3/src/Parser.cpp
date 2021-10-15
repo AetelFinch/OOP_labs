@@ -1,8 +1,9 @@
-#include "../include/Parser.h"
-
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+
+#include "../include/Parser.h"
+#include "Exception/Exceptions.h"
 
 Parser::~Parser()
 {
@@ -19,8 +20,7 @@ Parser::Parser(const std::string& filename)
     std::ifstream file(filename);
     if (!file.is_open())
     {
-        //TODO throw exception FileNotExist
-        throw std::exception();
+        throw FileNotFoundError();
     }
 
     std::string check_format;
@@ -29,8 +29,7 @@ Parser::Parser(const std::string& filename)
     if (check_format != "desc")
     {
         file.close();
-        //TODO throw exception IncorrectConfigurationFileError
-        throw std::exception();
+        throw IncorrectConfigurationFileError();
     }
 
     _desk = new std::map<int, std::vector<std::string>>;
@@ -53,8 +52,9 @@ Parser::Parser(const std::string& filename)
         if (!_is_params_correct(params))
         {
             file.close();
-            //TODO throw exception SyntaxError
-            throw std::exception();
+            delete _desk;
+            delete _commands;
+            throw SyntaxError();
         }
 
         _push_params_to_desk(params);
@@ -68,11 +68,20 @@ Parser::Parser(const std::string& filename)
     if (!_is_workflow_correct(workflow))
     {
         file.close();
-        //TODO throw exception SyntaxError
-        throw std::exception();
+        delete _desk;
+        delete _commands;
+        throw SyntaxError();
     }
 
     _push_workflow_to_commands(workflow);
+
+    if (!_is_correct_IO_files_order())
+    {
+        file.close();
+        delete _desk;
+        delete _commands;
+        throw WrongLocationIoBlockError();
+    }
 
     _cur_command = 0;
 }
@@ -152,3 +161,16 @@ void Parser::_push_workflow_to_commands(std::vector<std::string> workflow)
         _commands->push_back(id);
     }
 }
+
+bool Parser::_is_correct_IO_files_order()
+{
+    int first_id = _commands->front();
+    int last_id = _commands->back();
+
+    if (_desk->at(first_id).front() != "readfile" || _desk->at(last_id).front() != "writefile")
+    {
+        return false;
+    }
+    return true;
+}
+

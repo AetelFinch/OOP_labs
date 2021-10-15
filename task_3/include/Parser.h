@@ -25,6 +25,8 @@ private:
 
     bool _is_workflow_correct(std::vector<std::string> workflow);
     void _push_workflow_to_commands(std::vector<std::string> workflow);
+
+    bool _is_correct_IO_files_order();
 };
 
 #endif //TASK_3_PARSER_H
