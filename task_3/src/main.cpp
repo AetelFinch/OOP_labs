@@ -2,6 +2,7 @@
 #include <fstream>
 
 #include "../include/Parser.h"
+#include "../include/Worker.h"
 
 int main()
 {
