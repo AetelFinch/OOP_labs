@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
 
-#include "../include/Parser.h"
-#include "../include/Worker.h"
+#include "Parser.h"
+#include "Workers.h"
 
 int main()
 {

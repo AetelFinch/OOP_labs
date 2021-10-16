@@ -2,8 +2,8 @@
 #include <sstream>
 #include <algorithm>
 
-#include "../include/Parser.h"
-#include "Exception/Exceptions.h"
+#include "Parser.h"
+#include "Exceptions.h"
 
 Parser::~Parser()
 {
