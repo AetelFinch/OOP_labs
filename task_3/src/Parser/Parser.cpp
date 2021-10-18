@@ -83,11 +83,15 @@ Parser::Parser(const std::string& filename)
         throw WrongLocationIoBlockError();
     }
 
+    _count_commands = _commands->size();
     _cur_command = 0;
 }
 
 int Parser::get_current_command()
 {
+    if (_cur_command == _count_commands)
+        return -1;
+
     ++_cur_command;
     return _commands->at(_cur_command - 1);
 }

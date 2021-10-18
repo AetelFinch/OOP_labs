@@ -5,7 +5,6 @@
 #include <string>
 #include <map>
 
-using File = std::vector<std::string>;
 
 class Parser
 {
@@ -18,6 +17,7 @@ public:
 private:
     std::map<int, std::vector<std::string>> *_desk;
     std::vector<int> *_commands;
+    size_t _count_commands;
     size_t _cur_command;
 
     bool _is_params_correct(std::vector<std::string> params);
