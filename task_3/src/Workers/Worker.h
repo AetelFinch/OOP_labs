@@ -9,10 +9,10 @@ using File = std::vector<std::string>;
 class Worker
 {
 public:
+    virtual File& compute(File& file);
+    virtual ~Worker() { }
 
-private:
-    std::vector<std::string> params;
-    File file;
+    static Worker *createWorker(int id);
 };
 
 #endif //TASK_3_WORKER_H

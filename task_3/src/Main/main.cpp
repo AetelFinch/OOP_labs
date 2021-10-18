@@ -9,7 +9,17 @@ int main()
     std::string filename = "../test/configuration.txt";
     Parser parser(filename);
 
-    std::cout << "Ok";
+    File file;
+    while (true)
+    {
+        int id = parser.get_current_command();
+        if (id == -1)
+            break;
+
+//        Worker worker (parser.get_params(id));
+//        Worker *worker =
+//        file = worker->compute(file);
+    }
 
     return 0;
 }

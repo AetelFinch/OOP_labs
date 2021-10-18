@@ -96,6 +96,11 @@ int Parser::get_current_command()
     return _commands->at(_cur_command - 1);
 }
 
+std::vector<std::string> Parser::get_params(int id)
+{
+    return _desk->at(id);
+}
+
 bool Parser::_is_params_correct(std::vector<std::string> params)
 {
     if (params.size() < 3)
@@ -177,4 +182,3 @@ bool Parser::_is_correct_IO_files_order()
     }
     return true;
 }
-

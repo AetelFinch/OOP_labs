@@ -13,6 +13,7 @@ public:
     Parser(const std::string& filename);
 
     int get_current_command();
+    std::vector<std::string> get_params(int id);
 
 private:
     std::map<int, std::vector<std::string>> *_desk;
