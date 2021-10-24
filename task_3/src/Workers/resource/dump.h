@@ -11,7 +11,7 @@ public:
         std::ofstream opened_file(_params.at(0));
 
         for (const auto& line : file)
-            opened_file << line;
+            opened_file << line << std::endl;
 
         return file;
     }

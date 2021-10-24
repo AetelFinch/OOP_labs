@@ -1,0 +1,7 @@
+desc
+1 = readfile input_file.txt
+2 = writefile out_file.txt
+3 = sort
+4 = grep string
+csed
+1 -> 4 -> 3 -> 2

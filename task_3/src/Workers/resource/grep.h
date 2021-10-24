@@ -15,6 +15,7 @@ public:
             if (line->find(word) == std::string::npos)
             {
                 file.erase(line);
+                --line;
             }
         }
         return file;

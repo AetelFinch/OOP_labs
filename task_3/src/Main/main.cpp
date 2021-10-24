@@ -1,9 +1,21 @@
 #include "Parser.h"
 #include "Factory.h"
 
-int main()
+int main(int argc, char *argv[])
 {
-    std::string filename = "../test/configuration.txt";
+    if (argc == 1)
+    {
+        std::cout << "Please, enter the configuration file" << std::endl;
+        exit(1);
+    }
+
+    if (argc > 2)
+    {
+        std::cout << "Too many files" << std::endl;
+        exit(2);
+    }
+
+    std::string filename = argv[1];
     Parser parser(filename);
 
     File file;
