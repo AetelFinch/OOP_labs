@@ -160,3 +160,18 @@ TEST_F(TestHashTable, TestCompareOperators)
     new_table.insert("Max", {18, 50});
     ASSERT_TRUE(table == new_table);
 }
+
+TEST_F(TestHashTable, TestMove)
+{
+    Value test_value = {18, 50};
+
+    HashTable b;
+    b = std::move(table);
+
+    ASSERT_EQ(table.size(), 0);
+    ASSERT_EQ(b.at("Max"), test_value);
+
+    HashTable c(std::move(b));
+    ASSERT_EQ(b.size(), 0);
+    ASSERT_EQ(c.at("Max"), test_value);
+}
