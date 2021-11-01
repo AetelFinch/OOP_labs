@@ -1,12 +1,35 @@
 #include <gtest.h>
 #include "HashTable.h"
 
+
+struct Student
+{
+    size_t age;
+    size_t weight;
+
+    friend bool operator==(const Student& a, const Student& b)
+    {
+        if (a.age == b.age && a.weight == b.weight)
+            return true;
+        return false;
+    }
+
+    friend bool operator!=(const Student& a, const Student& b)
+    {
+        return !(a == b);
+    }
+};
+
+typedef std::string Key;
+typedef Student Value;
+
+
 using namespace std;
 
 class TestHashTable : public::testing::Test
 {
 protected:
-    HashTable table;
+    HashTable<Key, Value> table;
 
     void SetUp() override
     {
@@ -97,7 +120,7 @@ TEST_F(TestHashTable, TestInsert)
 
 TEST_F(TestHashTable, TestSwap)
 {
-    HashTable new_table;
+    HashTable<Key, Value> new_table;
     new_table.insert("qwerty", {13, 13});
 
     ASSERT_EQ(new_table.size(), 1);
@@ -151,7 +174,7 @@ TEST_F(TestHashTable, TestAt)
 
 TEST_F(TestHashTable, TestCompareOperators)
 {
-    HashTable new_table(table);
+    HashTable<Key, Value> new_table(table);
     ASSERT_TRUE(table == new_table);
 
     new_table.erase("Max");
@@ -165,13 +188,13 @@ TEST_F(TestHashTable, TestMove)
 {
     Value test_value = {18, 50};
 
-    HashTable b;
+    HashTable<Key, Value> b;
     b = std::move(table);
 
     ASSERT_EQ(table.size(), 0);
     ASSERT_EQ(b.at("Max"), test_value);
 
-    HashTable c(std::move(b));
+    HashTable<Key, Value> c(std::move(b));
     ASSERT_EQ(b.size(), 0);
     ASSERT_EQ(c.at("Max"), test_value);
 }
