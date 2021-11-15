@@ -1,6 +1,0 @@
-first string
-second string
-third string
-3 word1
-2 word2
-1 word1

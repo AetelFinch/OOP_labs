@@ -1,5 +1,4 @@
-#include "Parser.h"
-#include "Factory.h"
+#include "../include/workflow.h"
 
 int main(int argc, char *argv[])
 {
@@ -19,7 +18,7 @@ int main(int argc, char *argv[])
     Parser parser(filename);
 
     File file;
-    WorkerFactory workerFactory;
+    Factory workerFactory;
     while (true)
     {
         int id = parser.get_current_command();
