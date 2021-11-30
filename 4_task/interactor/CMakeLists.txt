@@ -3,6 +3,5 @@ project(Model)
 
 add_library(Model STATIC Model.cpp)
 
-target_include_directories(Model PUBLIC ../entities/gamefield/GameField.h)
-target_include_directories(Model PUBLIC ../entities/Chip.h)
-target_include_directories(Model PUBLIC ../entities/GameState.h)
+target_include_directories(Model PUBLIC ../entities/gamefield)
+target_include_directories(Model PUBLIC ../entities)

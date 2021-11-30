@@ -5,6 +5,11 @@ HumanPlayerImpl::HumanPlayerImpl(GameField *gameField, Chip chip) : PlayerInterf
 int HumanPlayerImpl::dropChip()
 {
     int turn;
-    std::cin >> turn;
-    return _gameField->dropChip(turn, _chip);
+    int state = -1;
+    while (state == -1)
+    {
+        std::cin >> turn;
+        state = _gameField->dropChip(turn, _chip);
+    }
+    return state;
 }

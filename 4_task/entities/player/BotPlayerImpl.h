@@ -2,6 +2,7 @@
 #define INC_4_TO_LINE_BOTPLAYERIMPL_H
 
 #include <random>
+#include <ctime>
 
 #include "PlayerInterface.h"
 

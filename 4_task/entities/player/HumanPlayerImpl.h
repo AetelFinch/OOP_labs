@@ -5,8 +5,9 @@
 
 #include "PlayerInterface.h"
 
-class HumanPlayerImpl : PlayerInterface
+class HumanPlayerImpl : public PlayerInterface
 {
+public:
     HumanPlayerImpl(GameField *gameField, Chip chip);
     int dropChip() override;
 };

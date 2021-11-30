@@ -6,10 +6,13 @@ GameField::GameField()
 
     for (int i = 0; i < _height; ++i)
     {
+        std::vector<Chip> line;
+        line.reserve(_width);
         for (int j = 0; j < _width; ++j)
         {
-            _field.at(i).push_back(NONE);
+            line.push_back(NONE);
         }
+        _field.push_back(line);
     }
 }
 

@@ -12,14 +12,15 @@ GameState Model::makeTurn()
 {
     _firstPlayer->dropChip();
     GameState state = _arbiter->getGameState();
-    //TODO notifyObservers
+    notifyObservers(state);
 
     if (state != CONTINUES)
         return state;
 
     _secondPlayer->dropChip();
     state = _arbiter->getGameState();
-    //TODO notifyObservers
+    notifyObservers(state);
+
     return state;
 }
 
