@@ -20,8 +20,9 @@ public:
 private:
     GameField *_gameField;
     Arbiter *_arbiter;
-    PlayerInterface *_firstPlayer;
-    PlayerInterface *_secondPlayer;
+    std::vector<PlayerInterface*> _players;
+    int _currentPlayer = 0;
+    int _previousPlayer = 1;
 };
 
 

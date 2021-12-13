@@ -15,5 +15,3 @@ void Controller::start()
             break;
     }
 }
-
-

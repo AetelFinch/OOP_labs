@@ -1,4 +1,5 @@
 #include "HumanPlayerImpl.h"
+#include "../../UI/controller/Controller.h"
 
 HumanPlayerImpl::HumanPlayerImpl(GameField *gameField, Chip chip) : PlayerInterface(gameField, chip) { }
 

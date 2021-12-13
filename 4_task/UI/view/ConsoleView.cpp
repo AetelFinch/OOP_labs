@@ -17,11 +17,11 @@ void ConsoleView::update(GameState state)
     }
     else if (state == WIN)
     {
-        std::cout << "you win!" << std::endl;
+        std::cout << "first player win" << std::endl;
     }
     else if (state == LOSE)
     {
-        std::cout << "you lose" << std::endl;
+        std::cout << "second player win" << std::endl;
     }
     else if (state == DRAW)
     {
@@ -48,5 +48,5 @@ void ConsoleView::paintField()
 
     for (int i = 0; i < 7; ++i)
         std::cout << i << " ";
-    std::cout << std::endl;
+    std::cout << std::endl << std::endl;
 }

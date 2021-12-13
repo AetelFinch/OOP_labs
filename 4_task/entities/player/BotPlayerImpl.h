@@ -11,6 +11,11 @@ class BotPlayerImpl : public PlayerInterface
 public:
     BotPlayerImpl(GameField *gameField, Chip chip);
     int dropChip() override;
+
+private:
+    int checkHorizontal(const std::vector<std::vector<Chip>>& field);
+    int checkVertical(const std::vector<std::vector<Chip>>& field);
+    unsigned int getRandomColumnNumber();
 };
 
 
